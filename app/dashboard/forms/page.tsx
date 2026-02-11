@@ -4,17 +4,6 @@ import { prisma } from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 export default async function FormsPage() {
-  if (!process.env.DATABASE_URL) {
-    return (
-      <main className="max-w-4xl mx-auto p-8">
-        <h1 className="text-2xl font-semibold mb-2">Formulaires</h1>
-        <p className="text-sm text-slate-600">
-          DATABASE_URL n’est pas configurée. Configurez cette variable d’environnement pour afficher les formulaires.
-        </p>
-      </main>
-    );
-  }
-
   const forms = await prisma.form.findMany({
     orderBy: { createdAt: 'desc' },
   });
