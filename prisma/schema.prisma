@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StepType {
+  QUESTION
+  END
+}
+
+enum FieldType {
+  TEXT
+  EMAIL
+  PHONE
+}
+
+model Form {
+  id          String       @id @default(cuid())
+  title       String
+  publicId    String       @unique
+  createdAt   DateTime     @default(now())
+  steps       Step[]
+  submissions Submission[]
+}
+
+model Step {
+  id         String    @id @default(cuid())
+  formId     String
+  order      Int
+  type       StepType
+  fieldType  FieldType?
+  label      String?
+  required   Boolean   @default(false)
+  endMessage String?
+  ctaLabel   String?
+  ctaUrl     String?
+  form       Form      @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers    Answer[]
+
+  @@unique([formId, order])
+}
+
+model Submission {
+  id        String   @id @default(cuid())
+  formId    String
+  createdAt DateTime @default(now())
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers   Answer[]
+}
+
+model Answer {
+  id           String     @id @default(cuid())
+  submissionId String
+  stepId       String
+  value        String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  step         Step       @relation(fields: [stepId], references: [id], onDelete: Cascade)
+}
