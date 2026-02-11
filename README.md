@@ -64,6 +64,7 @@ npm run dev
 - `DATABASE_URL`: connexion Postgres.
 - `INTERNAL_PASSWORD`: mot de passe unique pour `/dashboard/*`.
 - `NEXT_PUBLIC_APP_URL`: URL de base (utilisée pour redirection logout).
+- `DATABASE_URL` doit aussi être configurée en environnement de déploiement (ex: Vercel), sinon le build échoue lors du rendu des pages serveur.
 
 ## Tester le flux complet
 
